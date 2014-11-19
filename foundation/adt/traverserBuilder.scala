@@ -26,12 +26,13 @@ class TraverserMacros(val c: Context) extends AdtReflection {
     u.symbolOf[T].asRoot.allLeafs.foreach(_.sym.owner.info)
     val (methodName, paramName) = ensureOwnerIsDelegateWithOneParam[T]
     val cases = buildCases[T](methodName)
-		q"""
+		val res = q"""
     $paramName match {
       case ..$cases
       case _ => ()
      }
     """
+    res
 	}
 
   def buildCases[T : c.WeakTypeTag](methodName: TermName): List[c.Tree] = {
